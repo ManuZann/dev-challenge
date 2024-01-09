@@ -1,23 +1,28 @@
 import styled from "styled-components";
 import PropTypes from 'prop-types'
+import { useRef } from "react";
 
 const Background = styled.div`
-    z-index: 2;
+    z-index: 5;
     width: 100%;
-    height: auto;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.5);
     position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `
 
 const ModalWrapper = styled.div`
-    width: 65%;
+    width: auto;
     height: auto;
     box-shadow: 0 5px 16px rgba(0, 0, 0, 0.2);
     background: rgba(0, 0, 0, 0.8);
     color: white;
     border-radius: 10px;
-    position: absolute;
-    top: 4vw;
-    left: 4vw;
+    padding: 0 5px;
 `
 const ModalContent = styled.div`
     display: grid;
@@ -31,23 +36,33 @@ const CharacterImage = styled.img`
 `
 const StatInfo = styled.p`
     font-weight: bold;
-    font-size: 25px;
+    font-size: 1.5rem;
 `
 const StatName = styled.span`
     color: #8bc34a;
-    font-size: 30px
+    font-size: 2rem;
+`
+const PjName = styled.h1`
+    text-decoration: underline;
 `
 
 export function ModalCharacter({character, isOpen, toggleModal}){
+    const modalRef = useRef()
+
+    const closeModal = e => {
+        if(modalRef.current === e.target){
+            toggleModal()
+        }
+    }
     return(
         <>
             {isOpen ? 
-            (<Background onClick={() => toggleModal()}>
+            (<Background ref={modalRef} onClick={e => closeModal(e)}>
                 <ModalWrapper>
                     <ModalContent>
                         <CharacterImage src={character.image}/>
                         <div>
-                            <h1>{character.name}</h1>
+                            <PjName>{character.name}</PjName>
                             <div>
                                 <StatInfo><StatName>Status: </StatName>{character.status}</StatInfo>
                                 <StatInfo><StatName>Gender: </StatName>{character.gender}</StatInfo>
